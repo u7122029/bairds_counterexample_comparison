@@ -1,13 +1,9 @@
-import gymnasium as gym
-import numpy as np
-import bairds_counterexample_env
-from gymnasium.wrappers import TimeLimit
 from collections import deque
-import matplotlib.pyplot as plt
-from pathlib import Path
+
+import numpy as np
 
 
-class Agent:
+class LAAgent:
     def __init__(self, no_states, no_actions, seed=42):
         self.np_random = np.random.default_rng(seed)
 
@@ -38,8 +34,6 @@ class Agent:
 
     @property
     def v(self):
-        #print(self.G.shape)
-        #print(self.w[:, np.newaxis].shape)
         return self.G @ self.w[:, np.newaxis]
 
     @property
@@ -70,7 +64,8 @@ class Agent:
         return action
 
     def learn(self):
-        state, _, _, action, next_state, reward, terminated, _ = list(self.trajectory)
+        state, _, _, action, next_state, _, terminated, _ = list(self.trajectory)
+        # remember that reward is 0, so it doesn't matter.
 
         td_error = self.delta[next_state,state]
         rho_t = self.rho[action]
@@ -79,46 +74,3 @@ class Agent:
 
     def close(self):
         pass
-
-
-def play_episode(env, agent, seed=42):
-    state, _ = env.reset(seed=seed)
-    agent.reset(True)
-
-    terminated, reward = 0, False
-    episode_reward, elapsed_steps = 0, 0
-    done = False
-
-    while not done:
-        action = agent.step(state, reward, terminated)
-        state, reward, terminated, truncated, _ = env.step(action)
-        episode_reward += reward
-        elapsed_steps += 1
-        done = terminated or truncated
-
-    return episode_reward, elapsed_steps
-
-
-def main():
-    max_steps = 2000
-    num_states = 2
-    env = TimeLimit(gym.make('bairds_counterexample-v0', num_intermediate_states=num_states - 1),
-                    max_episode_steps=max_steps)
-    agent = Agent(env.observation_space.n, env.action_space.n, 42)
-    play_episode(env, agent)
-    full_w_history = np.stack(agent.w_history)
-
-    for i in range(num_states + 1):
-        out_path = Path("figures") / str(num_states).zfill(2) / f"w_{i}.png"
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        plt.figure()
-        plt.xlabel("Steps")
-        plt.ylabel("Weight")
-        #if num_states > 2:
-        plt.yscale('symlog')
-        plt.plot(full_w_history[:, i])
-        plt.title(f"Parameter w_{i} over {num_states} States")
-        plt.savefig(out_path)
-
-if __name__ == "__main__":
-    main()

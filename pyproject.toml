@@ -3,4 +3,9 @@ name = "bairds-counterexample-comparison"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "gymnasium",
+    "numpy",
+    "matplotlib",
+    "bairds_counterexample_env @ git+https://github.com/u7122029/bairds_counterexample_env.git"
+]
