@@ -29,7 +29,7 @@ def play_episode(env, agent, seed=42):
 
 def la_generate(num_states: int=6,
                 seed: int=42,
-                max_steps: int=3000):
+                max_steps: int=50000):
     env = TimeLimit(gym.make('bairds_counterexample-v0', num_intermediate_states=num_states - 1),
                     max_episode_steps=max_steps)
 

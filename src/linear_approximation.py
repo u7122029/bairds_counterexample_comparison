@@ -11,7 +11,7 @@ class LAAgent:
         self.no_actions = no_actions
 
         self.gamma = 0.99
-        self.learning_rate = 0.1
+        self.learning_rate = 0.03
 
         self.G = np.zeros((self.no_states, self.no_states + 1))
 
@@ -55,7 +55,7 @@ class LAAgent:
 
     def step(self, observation, reward, terminated):
         # sampling from behaviour policy.
-        action = self.np_random.choice(list(range(self.no_actions)), p=[1 - 1/self.no_states, 1/self.no_states])
+        action = self.np_random.choice(list(range(self.no_actions)), p=[1/self.no_states, 1 - 1/self.no_states])
         if self.train:
             self.trajectory.extend([observation, reward, terminated, action])
             if len(self.trajectory) >= 8:
