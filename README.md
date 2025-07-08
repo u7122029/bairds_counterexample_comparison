@@ -11,10 +11,12 @@ Baird's Counterexample is a Markov Decision Process (MDP) whose original formula
 - State space $S = \{s_i\}_{i = 0}^n$ where $n = 5$, none of which are terminal,
 - Action space $A = \{a_0, a_1\}$,
 - Dynamics: 
-$$\begin{align}
+```math
+\begin{align*}
 \text{Pr}[S_{t+1} = s_0 \mid A_t = a_0] &= 1\\
 \text{Pr}[S_{t+1} = s_i \mid A_t = a_1] &= \frac{1}{n} \quad i \neq 0
-\end{align}$$
+\end{align*}
+```
 - There is no reward for any transition.
 
 This MDP demonstrates that an RL algorithm that:
@@ -60,7 +62,9 @@ We observe that the weights are able to converge in these cases.
 ![src/figures/la_agent/05_states/w_s.png](src/figures/la_agent/05_states/w_s.png)
 ### Modification of Feature Space
 We observed that if we augment the feature space $G$ such that its first row is assigned as follows:
-$$G_{\cdot, 1} = \begin{bmatrix}2 & 2 & \dots & 2 & 1\end{bmatrix}$$
+```math
+G_{\cdot, 1} = \begin{bmatrix}2 & 2 & \dots & 2 & 1\end{bmatrix}
+```
 Then we can achieve divergence in all state space sizes. However, since the feature space does not change in Baird's
 Counterexample, this modification is at the very least a variant of it.
 ## Conclusion
