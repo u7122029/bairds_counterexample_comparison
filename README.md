@@ -67,6 +67,10 @@ G_{\cdot, 1} = \begin{bmatrix}2 & 2 & \dots & 2 & 1\end{bmatrix}
 ```
 Then we can achieve divergence in all state space sizes. However, since the feature space does not change in Baird's
 Counterexample, this modification is at the very least a variant of it.
+
+Our variant could theoretically be used to test off policy RL algorithms over a smaller state space for divergence.
+
+We could also test past algorithms that allow convergence over Baird's Counterexample to determine their robustness.
 ## Conclusion
 ## References
 1. Baird, L. 1995. Residual Algorithms: Reinforcement Learning with Function Approximation. In Proceedings of the Twelfth International Conference on Machine Learning (ICML 1995) (pp. 30–37). Morgan Kauffman.
