@@ -16,7 +16,7 @@ class LAAgent:
         self.G = np.zeros((self.no_states, self.no_states + 1))
 
         # Initialise G
-        self.G[0] = 2
+        self.G[0, 0] = 2
         self.G[0, -1] = 1
 
         id_indices = list(range(1, self.no_states))
@@ -67,7 +67,7 @@ class LAAgent:
         state, _, _, action, next_state, _, terminated, _ = list(self.trajectory)
         # remember that reward is 0, so it doesn't matter.
 
-        td_error = self.delta[next_state,state]
+        td_error = self.delta[next_state, state]
         rho_t = self.rho[action]
         self.w += self.learning_rate * td_error * rho_t * self.G[state]
         self._w_history.append(self.w.copy())

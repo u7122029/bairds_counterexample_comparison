@@ -37,37 +37,34 @@ def la_generate(num_states: int=6,
     play_episode(env, agent, seed)
     full_w_history = np.stack(agent.w_history)
 
-    out_path = Path("figures/la_agent") / f"{str(num_states).zfill(2)}_states" / f"{str(seed).zfill(2)}_seed" / "w_graphs" / f"w_s.png"
+    out_path = (Path("figures/la_agent") /
+                f"{str(num_states).zfill(2)}_states" / f"w_s.png")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-
-    plt.figure()
-    plt.grid()
-    plt.xlabel("Steps")
-    plt.ylabel("Weight")
-    plt.title(f"Parameters over {num_states} States")
-    plt.yscale('symlog')
+    length = int(np.sqrt(num_states + 1)) + 1
+    fig, axs = plt.subplots(length,
+                            length, sharex=True, sharey=True, figsize=(11.52, 8.64), dpi=300, constrained_layout=True)
+    fig.suptitle(f"Parameters over {num_states} States")
     for i in range(num_states + 1):
-        plt.plot(full_w_history[:, i], label=f"w_{i}")
-    plt.legend(loc="best")
-    plt.savefig(out_path)
-    plt.close()
+        row = i // length
+        col = i % length
+        ax = axs[row, col]
+        ax.grid()
+        ax.set_yscale('symlog', linthresh=1)
+        ax.plot(full_w_history[:, i], label=f"w_{i}")
+        ax.set_title(f"w_{i}")
+        ax.set_xlabel("Steps")
+        ax.set_ylabel("Weight")
 
-    for i in range(num_states + 1):
-        out_path = Path("figures/la_agent") / f"{str(num_states).zfill(2)}_states" / f"{str(seed).zfill(2)}_seed" / "w_graphs" / f"w_{i}.png"
-        out_path.parent.mkdir(parents=True, exist_ok=True)
+    for j in range(num_states + 1, int(length ** 2)):
+        row = j // length
+        col = j % length
+        axs[row, col].set_visible(False)
 
-        plt.figure()
-        plt.grid()
-        plt.xlabel("Steps")
-        plt.ylabel("Weight")
-        plt.title(f"Parameter w_{i} over {num_states} States")
-        plt.yscale('symlog')
-        plt.plot(full_w_history[:, i])
-        plt.savefig(out_path)
-        plt.close()
+    fig.savefig(out_path)
+    plt.close(fig)
 
     # Plot the values v
-    v_history = agent.G @ full_w_history.transpose((1, 0))
+    """v_history = agent.G @ full_w_history.transpose((1, 0))
     for i in range(num_states):
         out_path = Path("figures/la_agent") / f"{str(num_states).zfill(2)}_states" / f"{str(seed).zfill(2)}_seed" / "v_graphs" / f"v_{i}.png"
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -78,7 +75,7 @@ def la_generate(num_states: int=6,
         plt.ylabel("v")
         plt.plot(v_history[i, :])
         plt.savefig(out_path)
-        plt.close()
+        plt.close()"""
 
 def td_generate(num_states: int=6,
                 seed: int=42,
@@ -100,7 +97,7 @@ def td_generate(num_states: int=6,
     plt.title(f"Parameters over {num_states} States")
     plt.yscale('symlog')
     for i in range(num_states):
-        plt.plot(full_w_history[:, i], label=f"v_{i}")
+        plt.plot(full_w_history[:, i], label=f"v_{i}", linewidth=0.5)
     plt.legend(loc="best")
     plt.savefig(out_path)
     plt.close()
@@ -122,10 +119,9 @@ def td_generate(num_states: int=6,
 
 
 def main():
-    for seed in [0, 42]:
-        for num_states in range(2, 10):
-            la_generate(num_states, seed)
-            #td_generate(num_states, seed)
+    for num_states in range(2, 10):
+        la_generate(num_states, 42)
+        #td_generate(num_states, seed)
 
 
 if __name__ == "__main__":

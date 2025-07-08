@@ -38,8 +38,31 @@ Baird's Counterexample, making it potentially simpler to understand, while achie
 weights $\vec{w}$ of the algorithm.
 
 ## Run the Code
+Our project utilises the `uv` package manager, and we assume the following commands are executed at the root level of
+the project.
 ```bash
-
+pip install uv
+uv pip install -e .
+cd src
+python main.py
 ```
+## Results
+### Original State Space (6 States)
+![src/figures/la_agent/06_states/w_s.png](src/figures/la_agent/06_states/w_s.png)
+We observe oscillating, divergent behaviour as previously noted by previous studies.
+### 7 States
+![src/figures/la_agent/06_states/w_s.png](src/figures/la_agent/07_states/w_s.png)
+### Reduced State Space (2-5 States)
+We observe that the weights are able to converge in these cases.
+![src/figures/la_agent/02_states/w_s.png](src/figures/la_agent/02_states/w_s.png)
+![src/figures/la_agent/03_states/w_s.png](src/figures/la_agent/03_states/w_s.png)
+![src/figures/la_agent/04_states/w_s.png](src/figures/la_agent/04_states/w_s.png)
+![src/figures/la_agent/05_states/w_s.png](src/figures/la_agent/05_states/w_s.png)
+### Modification of Feature Space
+We observed that if we augment the feature space $G$ such that its first row is assigned as follows:
+$$G_{\cdot, 1} = \begin{bmatrix}2 & 2 & \dots & 2 & 1\end{bmatrix}$$
+Then we can achieve divergence in all state space sizes. However, since the feature space does not change in Baird's
+Counterexample, this modification is at the very least a variant of it.
+## Conclusion
 ## References
 1. Baird, L. 1995. Residual Algorithms: Reinforcement Learning with Function Approximation. In Proceedings of the Twelfth International Conference on Machine Learning (ICML 1995) (pp. 30–37). Morgan Kauffman.
