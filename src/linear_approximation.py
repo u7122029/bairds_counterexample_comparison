@@ -23,8 +23,12 @@ class LAAgent:
         self.G[id_indices, id_indices] = 2
         self.G[1:, 0] = 1
 
-        self.w = np.zeros(self.no_states + 1)
-        self.w[0] = 1
+        self.x = 1
+        self.w = np.zeros(self.no_states + 1) + 2
+        self.w[0] = 5
+        self.w[-1] = 10 * (self.gamma - 1)
+        self.w *= self.x
+        print(self.w)
 
         self._w_history = []
 
